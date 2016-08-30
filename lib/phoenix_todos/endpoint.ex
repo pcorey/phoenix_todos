@@ -9,7 +9,7 @@ defmodule PhoenixTodos.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/", from: :phoenix_todos, gzip: false,
-    only: ~w(css fonts images js favicon.ico robots.txt)
+    only: ~w(css font js icon favicon.ico favicon.png apple-touch-icon-precomposed.png logo-todos.svg)
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

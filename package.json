@@ -1,12 +1,14 @@
 {
-  "repository": {
-  },
+  "repository": {},
   "dependencies": {
     "babel-brunch": "^6.0.0",
+    "babel-preset-react": "^6.11.1",
     "brunch": "^2.0.0",
     "clean-css-brunch": ">= 1.0 < 1.8",
     "css-brunch": ">= 1.0 < 1.8",
     "javascript-brunch": ">= 1.0 < 1.8",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
     "uglify-js-brunch": ">= 1.0 < 1.8"
   }
 }

@@ -38,7 +38,8 @@ defmodule PhoenixTodos.Mixfile do
      {:gettext, "~> 0.9"},
      {:cowboy, "~> 1.0"},
      {:mix_test_watch, "~> 0.2", only: :dev},
-     {:comeonin, "~> 2.0"}]
+     {:comeonin, "~> 2.0"},
+     {:guardian, "~> 0.12.0"}]
   end
 
   # Aliases are shortcut or tasks specific to the current project.

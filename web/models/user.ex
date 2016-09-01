@@ -24,5 +24,15 @@ defmodule PhoenixTodos.User do
     |> validate_format(:email, ~r/@/)
     |> validate_length(:password, min: 5)
     |> unique_constraint(:email, message: "Email taken")
+    |> put_encrypted_password
   end
+
+  defp put_encrypted_password(changeset = %Ecto.Changeset{
+    valid?: true,
+    changes: %{password: password}
+  }) do
+    changeset
+    |> put_change(:encrypted_password, Comeonin.Bcrypt.hashpwsalt(password))
+  end
+  defp put_encrypted_password(changeset), do: changeset
 end

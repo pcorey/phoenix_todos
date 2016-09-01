@@ -35,15 +35,13 @@ defmodule PhoenixTodos.UserTest do
   test "changeset with non-unique email" do
     User.changeset(%User{}, %{
       email: "email@example.com",
-      password: "password",
-      encrypted_password: "encrypted"
+      password: "password"
     })
     |> Repo.insert!
 
     assert {:error, _} = User.changeset(%User{}, %{
       email: "email@example.com",
-      password: "password",
-      encrypted_password: "encrypted"
+      password: "password"
     })
     |> Repo.insert
   end

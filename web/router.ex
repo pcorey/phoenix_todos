@@ -11,12 +11,16 @@ defmodule PhoenixTodos.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug Guardian.Plug.VerifyHeader
+    plug Guardian.Plug.LoadResource
   end
 
   scope "/api", PhoenixTodos do
     pipe_through :api
 
     post "/users", UserController, :create
+
+    post "/sessions", SessionController, :create
   end
 
   scope "/", PhoenixTodos do

@@ -6,6 +6,10 @@ export const SIGN_OUT_REQUEST = "SIGN_OUT_REQUEST";
 export const SIGN_OUT_SUCCESS = "SIGN_OUT_SUCCESS";
 export const SIGN_OUT_FAILURE = "SIGN_OUT_FAILURE";
 
+export const SIGN_IN_REQUEST = "SIGN_IN_REQUEST";
+export const SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS";
+export const SIGN_IN_FAILURE = "SIGN_IN_FAILURE";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -28,6 +32,18 @@ export function signOutSuccess() {
 
 export function signOutFailure(errors) {
   return { type: SIGN_OUT_FAILURE, errors };
+}
+
+export function signInRequest() {
+  return { type: SIGN_IN_REQUEST };
+}
+
+export function signInSuccess() {
+  return { type: SIGN_IN_SUCCESS };
+}
+
+export function signInFailure(errors) {
+  return { type: SIGN_IN_FAILURE, errors };
 }
 
 export function signUp(email, password, password_confirm) {
@@ -99,6 +115,45 @@ export function signOut(jwt) {
           localStorage.removeItem("user");
           localStorage.removeItem("jwt");
           dispatch(signOutSuccess());
+          return true;
+        }
+      });
+  }
+}
+
+export function signIn(email, password) {
+  return (dispatch) => {
+    dispatch(signInRequest());
+
+    let errors = [];
+    if (!email) {
+      errors.push({ email: "Email required" });
+    }
+    if (!password) {
+      errors.push({ password: "Password required" });
+    }
+    if (errors.length) {
+      return Promise.resolve(dispatch(signInFailure(errors)));
+    }
+
+    return fetch("/api/sessions", {
+      method: "post",
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password })
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.errors) {
+          dispatch(signInFailure(res.errors));
+          return false;
+        }
+        else {
+          localStorage.setItem("user", JSON.stringify(res.user));
+          localStorage.setItem("jwt", res.jwt);
+          dispatch(signInSuccess(res.user, res.jwt));
           return true;
         }
       });

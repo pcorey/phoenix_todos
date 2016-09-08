@@ -5,6 +5,9 @@ import {
   SIGN_OUT_REQUEST,
   SIGN_OUT_SUCCESS,
   SIGN_OUT_FAILURE,
+  SIGN_IN_REQUEST,
+  SIGN_IN_SUCCESS,
+  SIGN_IN_FAILURE,
 } from "../actions";
 
 const user = localStorage.getItem("user");
@@ -22,13 +25,16 @@ const initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
+  case SIGN_IN_REQUEST:
   case SIGN_UP_REQUEST:
     return state;
+  case SIGN_IN_SUCCESS:
   case SIGN_UP_SUCCESS:
     return Object.assign({}, state, {
       user: action.user,
       jwt: action.jwt
     });
+  case SIGN_IN_FAILURE:
   case SIGN_UP_FAILURE:
     return Object.assign({}, state, {
       errors: action.errors

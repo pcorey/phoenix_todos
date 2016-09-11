@@ -3,6 +3,19 @@ defmodule PhoenixTodos.SessionController do
 
   alias PhoenixTodos.{User, Repo}
 
+  def delete(conn, _) do
+    conn
+    |> revoke_claims
+    |> render(PhoenixTodos.ApiView, "data.json", data: %{})
+  end
+
+  defp revoke_claims(conn) do
+    {:ok, claims} = Guardian.Plug.claims(conn)
+    Guardian.Plug.current_token(conn)
+    |> Guardian.revoke!(claims)
+    conn
+  end
+
   def create(conn, %{"email" => email, "password" => password}) do
     user = get_user(email)
     user

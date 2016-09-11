@@ -21,6 +21,7 @@ defmodule PhoenixTodos.Router do
     post "/users", UserController, :create
 
     post "/sessions", SessionController, :create
+    delete "/sessions", SessionController, :delete
   end
 
   scope "/", PhoenixTodos do

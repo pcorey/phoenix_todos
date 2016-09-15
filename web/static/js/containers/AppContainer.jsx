@@ -1,19 +1,6 @@
 import App from '../layouts/App.jsx';
-import React from 'react';
+import { connect } from "react-redux";
 
-export default class AppContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      user: undefined,
-      loading: false,
-      connected: true,
-      menuOpen: false,
-      lists: []
-    };
-  }
+const AppContainer = connect(state => state)(App);
 
-  render() {
-    return (<App {...this.state} {...this.props}/>);
-  }
-};
+export default AppContainer;

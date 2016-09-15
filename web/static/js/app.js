@@ -1,4 +1,14 @@
-import { render } from "react-dom";
+import ReactDOM from "react-dom";
+import reducers from "./reducers";
+import { createStore } from "redux";
 import { renderRoutes } from "./routes.jsx";
 
-render(renderRoutes(), document.getElementById("app"));
+const store = createStore(reducers);
+const el = document.getElementById("app");
+
+function render() {
+  ReactDOM.render(renderRoutes(store), el);
+}
+
+render();
+store.subscribe(render);

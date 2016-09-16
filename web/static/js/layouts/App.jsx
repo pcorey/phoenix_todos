@@ -4,10 +4,12 @@ import UserMenu from '../components/UserMenu.jsx';
 import ListList from '../components/ListList.jsx';
 import ConnectionNotification from '../components/ConnectionNotification.jsx';
 import Loading from '../components/Loading.jsx';
+import { connect } from "react-redux";
+import { signOut } from "../actions";
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,16 +40,19 @@ export default class App extends React.Component {
   }
 
   logout() {
-    Meteor.logout();
-
-    // if we are on a private list, we'll need to go to a public one
-    if (this.props.params.id) {
-      const list = Lists.findOne(this.props.params.id);
-      if (list.userId) {
-        const publicList = Lists.findOne({ userId: { $exists: false } });
-        this.context.router.push(`/lists/${ publicList._id }`);
-      }
-    }
+    this.props.signOut(this.props.jwt)
+      .then((success) => {
+        if (success) {
+          // if we are on a private list, we'll need to go to a public one
+          if (this.props.params.id) {
+            const list = Lists.findOne(this.props.params.id);
+            if (list.userId) {
+              const publicList = Lists.findOne({ userId: { $exists: false } });
+              this.context.router.push(`/lists/${ publicList._id }`);
+            }
+          }
+        }
+      });
   }
 
   render() {
@@ -110,3 +115,12 @@ App.propTypes = {
 App.contextTypes = {
   router: React.PropTypes.object,
 };
+
+export default connect(
+    (state) => state,
+    (dispatch) => ({
+      signOut: (jwt) => {
+        return dispatch(signOut(jwt));
+      }
+    })
+)(App);

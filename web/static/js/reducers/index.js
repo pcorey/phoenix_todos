@@ -2,6 +2,9 @@ import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
+  SIGN_OUT_REQUEST,
+  SIGN_OUT_SUCCESS,
+  SIGN_OUT_FAILURE,
 } from "../actions";
 
 const initialState = {
@@ -24,6 +27,18 @@ export default (state = initialState, action) => {
       jwt: action.jwt
     });
   case SIGN_UP_FAILURE:
+    return Object.assign({}, state, {
+      errors: action.errors
+    });
+
+  case SIGN_OUT_REQUEST:
+    return state;
+  case SIGN_OUT_SUCCESS:
+    return Object.assign({}, state, {
+      user: undefined,
+      jwt: undefined
+    });
+  case SIGN_OUT_FAILURE:
     return Object.assign({}, state, {
       errors: action.errors
     });

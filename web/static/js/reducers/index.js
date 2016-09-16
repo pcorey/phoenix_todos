@@ -7,9 +7,12 @@ import {
   SIGN_OUT_FAILURE,
 } from "../actions";
 
+const user = localStorage.getItem("user");
+const jwt = localStorage.getItem("jwt");
+
 const initialState = {
-  user: undefined,
-  jwt: undefined,
+  user: user ? JSON.parse(user) : user,
+  jwt,
   loading: false,
   connected: true,
   menuOpen: false,

@@ -69,6 +69,8 @@ export function signUp(email, password, password_confirm) {
           return false;
         }
         else {
+          localStorage.setItem("user", JSON.stringify(res.user));
+          localStorage.setItem("jwt", res.jwt);
           dispatch(signUpSuccess(res.user, res.jwt));
           return true;
         }
@@ -94,6 +96,8 @@ export function signOut(jwt) {
           return false;
         }
         else {
+          localStorage.removeItem("user");
+          localStorage.removeItem("jwt");
           dispatch(signOutSuccess());
           return true;
         }

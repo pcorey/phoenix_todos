@@ -1,9 +1,13 @@
 import ReactDOM from "react-dom";
 import reducers from "./reducers";
-import { createStore } from "redux";
+import { createStore, applyMiddleware } from "redux";
 import { renderRoutes } from "./routes.jsx";
+import thunkMiddleware from "redux-thunk";
 
-const store = createStore(reducers);
+const store = createStore(
+  reducers,
+  applyMiddleware(thunkMiddleware)
+);
 const el = document.getElementById("app");
 
 function render() {

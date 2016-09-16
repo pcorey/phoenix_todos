@@ -20,7 +20,7 @@ export default class UserMenu extends React.Component {
   renderLoggedIn() {
     const { open } = this.state;
     const { user, logout } = this.props;
-    const email = user.emails[0].address;
+    const email = user.email;
     const emailLocalPart = email.substring(0, email.indexOf('@'));
 
     return (

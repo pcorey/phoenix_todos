@@ -1,11 +1,15 @@
 import React from 'react';
 import AuthPage from './AuthPage.jsx';
 import { Link } from 'react-router';
+import { connect } from "react-redux";
+import { signUp } from "../actions";
 
-export default class JoinPage extends React.Component {
+class JoinPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { errors: {} };
+    this.state = {
+      signUp: props.signUp
+    };
     this.onSubmit = this.onSubmit.bind(this);
   }
 
@@ -31,40 +35,18 @@ export default class JoinPage extends React.Component {
       return;
     }
 
-    fetch("/api/users", {
-      method: "post",
-      headers: {
-        "Accept": "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user: {
-          email,
-          password,
-          password_confirm
+    this.state.signUp(email, password, password_confirm)
+      .then((success) => {
+        if (success) {
+          this.context.router.push('/');
         }
-      })
-    })
-      .then((res) => {
-        res
-          .json()
-          .then((json) => {
-            if (json.errors) {
-              let errors = json.errors.reduce((errors, error) => {
-                return Object.assign(errors, error);
-              });
-              this.setState({errors});
-            }
-            else {
-              // TODO: Save `json.user` and `json.jwt` to state
-              this.context.router.push('/');
-            }
-          });
       });
   }
 
   render() {
-    const { errors } = this.state;
+    const errors = (this.props.errors || []).reduce((errors, error) => {
+      return Object.assign(errors, error);
+    }, {});
     const errorMessages = Object.keys(errors).map(key => errors[key]);
     const errorClass = key => errors[key] && 'error';
 
@@ -104,3 +86,18 @@ export default class JoinPage extends React.Component {
 JoinPage.contextTypes = {
   router: React.PropTypes.object,
 };
+
+export default connect(
+  (state) => {
+    return {
+      errors: state.errors
+    }
+  },
+  (dispatch) => {
+    return {
+      signUp: (email, password, password_confirm) => {
+        return dispatch(signUp(email, password, password_confirm));
+      }
+    };
+  }
+)(JoinPage);

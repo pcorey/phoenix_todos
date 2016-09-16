@@ -17,6 +17,21 @@ export function signUpFailure(errors) {
 export function signUp(email, password, password_confirm) {
   return (dispatch) => {
     dispatch(signUpRequest());
+
+    let errors = [];
+    if (!email) {
+      errors.push({ email: "Email required" });
+    }
+    if (!password) {
+      errors.push({ password: "Password required" });
+    }
+    if (password_confirm !== password) {
+      errors.push({ password_confirm: "Please confirm your password" });
+    }
+    if (errors.length) {
+      return Promise.resolve(dispatch(signUpFailure(errors)));
+    }
+
     return fetch("/api/users", {
       method: "post",
       headers: {

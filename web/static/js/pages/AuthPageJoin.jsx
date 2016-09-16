@@ -18,22 +18,6 @@ class JoinPage extends React.Component {
     const email = this.refs.email.value;
     const password = this.refs.password.value;
     const password_confirm = this.refs.password_confirm.value;
-    const errors = {};
-
-    if (!email) {
-      errors.email = 'Email required';
-    }
-    if (!password) {
-      errors.password = 'Password required';
-    }
-    if (password_confirm !== password) {
-      errors.password_confirm = 'Please confirm your password';
-    }
-
-    this.setState({ errors });
-    if (Object.keys(errors).length) {
-      return;
-    }
 
     this.state.signUp(email, password, password_confirm)
       .then((success) => {

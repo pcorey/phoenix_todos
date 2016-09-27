@@ -29,9 +29,9 @@ class App extends React.Component {
 
   componentWillReceiveProps({ loading, children }) {
     // redirect / to a list once lists are ready
-    if (!loading && !children) {
-      const list = Lists.findOne();
-      this.context.router.replace(`/lists/${ list._id }`);
+    if (!loading && !children && this.props.lists.length) {
+      const list = this.props.lists[0];
+      this.context.router.replace(`/lists/${ list.id }`);
     }
   }
 
@@ -48,7 +48,7 @@ class App extends React.Component {
             const list = Lists.findOne(this.props.params.id);
             if (list.userId) {
               const publicList = Lists.findOne({ userId: { $exists: false } });
-              this.context.router.push(`/lists/${ publicList._id }`);
+              this.context.router.push(`/lists/${ publicList.id }`);
             }
           }
         }

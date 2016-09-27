@@ -10,6 +10,8 @@ export const SIGN_IN_REQUEST = "SIGN_IN_REQUEST";
 export const SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS";
 export const SIGN_IN_FAILURE = "SIGN_IN_FAILURE";
 
+export const ADD_LIST = "ADD_LIST";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -44,6 +46,10 @@ export function signInSuccess() {
 
 export function signInFailure(errors) {
   return { type: SIGN_IN_FAILURE, errors };
+}
+
+export function addList(list) {
+  return { type: ADD_LIST, list };
 }
 
 export function signUp(email, password, password_confirm) {

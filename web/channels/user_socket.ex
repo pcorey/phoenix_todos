@@ -3,6 +3,7 @@ defmodule PhoenixTodos.UserSocket do
 
   ## Channels
   # channel "rooms:*", PhoenixTodos.RoomChannel
+  channel "lists.public", PhoenixTodos.ListChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

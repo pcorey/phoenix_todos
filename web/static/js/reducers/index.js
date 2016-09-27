@@ -8,6 +8,7 @@ import {
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
+  ADD_LIST,
 } from "../actions";
 
 const user = localStorage.getItem("user");
@@ -50,6 +51,10 @@ export default (state = initialState, action) => {
   case SIGN_OUT_FAILURE:
     return Object.assign({}, state, {
       errors: action.errors
+    });
+  case ADD_LIST:
+    return Object.assign({}, state, {
+      lists: [...state.lists, action.list]
     });
   default:
     return state;

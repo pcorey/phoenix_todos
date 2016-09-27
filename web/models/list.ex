@@ -1,6 +1,13 @@
 defmodule PhoenixTodos.List do
   use PhoenixTodos.Web, :model
 
+  @derive {Poison.Encoder, only: [
+    :id,
+    :name,
+    :incomplete_count,
+    :user_id
+  ]}
+
   schema "lists" do
     field :name, :string
     field :incomplete_count, :integer
@@ -23,4 +30,10 @@ defmodule PhoenixTodos.List do
     model
     |> cast(params, @required_fields, @optional_fields)
   end
+
+  def public(query) do
+    from list in query,
+      where: is_nil(list.user_id)
+  end
+
 end

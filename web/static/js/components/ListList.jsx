@@ -31,8 +31,8 @@ export default class ListList extends React.Component {
         </a>
         {lists.map(list => (
           <Link
-            to={`/lists/${ list._id }`}
-            key={list._id}
+            to={`/lists/${ list.id }`}
+            key={list.id}
             title={list.name}
             className="list-todo"
             activeClassName="active"

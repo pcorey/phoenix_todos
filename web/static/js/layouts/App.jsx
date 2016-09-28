@@ -45,9 +45,9 @@ class App extends React.Component {
         if (success) {
           // if we are on a private list, we'll need to go to a public one
           if (this.props.params.id) {
-            const list = Lists.findOne(this.props.params.id);
-            if (list.userId) {
-              const publicList = Lists.findOne({ userId: { $exists: false } });
+            const list = _.find(this.props.lists, list => list.id == this.props.params.id);
+            if (list.user_id) {
+              const publicList = _.find(this.props.list, list => !list.user_id);
               this.context.router.push(`/lists/${ publicList.id }`);
             }
           }

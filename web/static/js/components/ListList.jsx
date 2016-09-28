@@ -37,11 +37,11 @@ export default class ListList extends React.Component {
             className="list-todo"
             activeClassName="active"
           >
-            {list.userId
+            {list.user_id
               ? <span className="icon-lock"></span>
               : null}
-            {list.incompleteCount
-              ? <span className="count-list">{list.incompleteCount}</span>
+            {list.incomplete_count
+              ? <span className="count-list">{list.incomplete_count}</span>
               : null}
             {list.name}
           </Link>

@@ -14,7 +14,7 @@ export default class TodoItem extends React.Component {
     this.throttledUpdate = _.throttle(value => {
       if (value) {
         updateText.call({
-          todoId: this.props.todo._id,
+          todoId: this.props.todo.id,
           newText: value,
         }, alert);
       }
@@ -28,16 +28,16 @@ export default class TodoItem extends React.Component {
   }
 
   onFocus() {
-    this.props.onEditingChange(this.props.todo._id, true);
+    this.props.onEditingChange(this.props.todo.id, true);
   }
 
   onBlur() {
-    this.props.onEditingChange(this.props.todo._id, false);
+    this.props.onEditingChange(this.props.todo.id, false);
   }
 
   setTodoCheckStatus(event) {
     setCheckedStatus.call({
-      todoId: this.props.todo._id,
+      todoId: this.props.todo.id,
       newCheckedStatus: event.target.checked,
     });
   }
@@ -47,7 +47,7 @@ export default class TodoItem extends React.Component {
   }
 
   deleteTodo() {
-    remove.call({ todoId: this.props.todo._id }, alert);
+    remove.call({ todoId: this.props.todo.id }, alert);
   }
 
   render() {

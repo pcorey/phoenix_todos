@@ -39,8 +39,8 @@ export default class ListPage extends React.Component {
       Todos = todos.map(todo => (
         <TodoItem
           todo={todo}
-          key={todo._id}
-          editing={todo._id === editingTodo}
+          key={todo.id}
+          editing={todo.id === editingTodo}
           onEditingChange={this.onEditingChange}
         />
       ));

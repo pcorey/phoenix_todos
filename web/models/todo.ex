@@ -1,6 +1,12 @@
 defmodule PhoenixTodos.Todo do
   use PhoenixTodos.Web, :model
 
+  @derive {Poison.Encoder, only: [
+    :id,
+    :text,
+    :checked
+  ]}
+
   schema "todos" do
     field :text, :string
     field :checked, :boolean, default: false

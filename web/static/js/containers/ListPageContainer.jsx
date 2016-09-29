@@ -10,7 +10,7 @@ const ListPageContainer = connect(
       loading: state.loading,
       list: list,
       listExists: !!list,
-      todos: []
+      todos: _.get(list, "todos") || []
     }
   }
 )(ListPage);

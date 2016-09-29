@@ -5,7 +5,8 @@ defmodule PhoenixTodos.List do
     :id,
     :name,
     :incomplete_count,
-    :user_id
+    :user_id,
+    :todos
   ]}
 
   schema "lists" do
@@ -33,7 +34,8 @@ defmodule PhoenixTodos.List do
 
   def public(query) do
     from list in query,
-      where: is_nil(list.user_id)
+    where: is_nil(list.user_id),
+    preload: [:todos]
   end
 
 end

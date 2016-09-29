@@ -8,6 +8,7 @@ import {
   SIGN_IN_REQUEST,
   SIGN_IN_SUCCESS,
   SIGN_IN_FAILURE,
+  CONNECT_SOCKET,
   ADD_LIST,
 } from "../actions";
 
@@ -15,6 +16,7 @@ const user = localStorage.getItem("user");
 const jwt = localStorage.getItem("jwt");
 
 const initialState = {
+  socket: undefined,
   user: user ? JSON.parse(user) : user,
   jwt,
   loading: false,
@@ -56,6 +58,8 @@ export default (state = initialState, action) => {
     return Object.assign({}, state, {
       lists: [...state.lists, action.list]
     });
+  case CONNECT_SOCKET:
+    return Object.assign({}, state, { socket: action.socket });
   default:
     return state;
   }

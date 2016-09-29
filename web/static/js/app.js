@@ -4,9 +4,9 @@ import { createStore, applyMiddleware } from "redux";
 import { renderRoutes } from "./routes.jsx";
 import thunkMiddleware from "redux-thunk";
 import {
-  addList
+  connectSocket,
+  joinListsChannel
 } from "./actions";
-import socket from "./socket";
 
 const store = createStore(
   reducers,
@@ -19,16 +19,6 @@ function render() {
 }
 
 render();
-store.subscribe(render);
 
-socket.connect();
-socket.channel("lists.public", {})
-    .join()
-    .receive("ok", (res) => {
-      res.forEach((list) => {
-        store.dispatch(addList(list));
-      });
-    })
-    .receive("error", (res) => {
-        console.log("error", res);
-    });
+store.dispatch(connectSocket(store.getState().jwt));
+store.dispatch(joinListsChannel("lists.public"));

@@ -1,3 +1,5 @@
+import { Socket } from "deps/phoenix/web/static/js/phoenix"
+
 export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
 export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
@@ -9,6 +11,12 @@ export const SIGN_OUT_FAILURE = "SIGN_OUT_FAILURE";
 export const SIGN_IN_REQUEST = "SIGN_IN_REQUEST";
 export const SIGN_IN_SUCCESS = "SIGN_IN_SUCCESS";
 export const SIGN_IN_FAILURE = "SIGN_IN_FAILURE";
+
+export const CONNECT_SOCKET = "CONNECT_SOCKET";
+
+export const JOIN_LISTS_CHANNEL_REQUEST = "JOIN_LISTS_CHANNEL_REQUEST";
+export const JOIN_LISTS_CHANNEL_SUCCESS = "JOIN_LISTS_CHANNEL_SUCCESS";
+export const JOIN_LISTS_CHANNEL_FAILURE = "JOIN_LISTS_CHANNEL_FAILURE";
 
 export const ADD_LIST = "ADD_LIST";
 
@@ -50,6 +58,28 @@ export function signInFailure(errors) {
 
 export function addList(list) {
   return { type: ADD_LIST, list };
+}
+
+export function connectSocket(jwt) {
+  let socket = new Socket("/socket", {
+    params: {
+      token: jwt
+    }
+  });
+  socket.connect();
+  return { type: CONNECT_SOCKET, socket };
+}
+
+export function joinListsChannelRequest(channel) {
+  return { type: JOIN_LISTS_CHANNEL_REQUEST, channel };
+}
+
+export function joinListsChannelSuccess(channel) {
+  return { type: JOIN_LISTS_CHANNEL_SUCCESS, channel };
+}
+
+export function joinListsChannelFailure(channel, error) {
+  return { type: JOIN_LISTS_CHANNEL_FAILURE, channel, error };
 }
 
 export function signUp(email, password, password_confirm) {
@@ -162,6 +192,27 @@ export function signIn(email, password) {
           dispatch(signInSuccess(res.user, res.jwt));
           return true;
         }
+      });
+  }
+}
+
+export function joinListsChannel(channel) {
+  return (dispatch, getState) => {
+    const { socket } = getState();
+
+    dispatch(joinListsChannelRequest());
+
+    socket
+      .channel(channel)
+      .join()
+      .receive("ok", (lists) => {
+        lists.forEach((list) => {
+          dispatch(addList(list));
+        });
+        dispatch(joinListsChannelSuccess(channel));
+      })
+      .receive("error", (error) => {
+        dispatch(joinListsChannelFailure(channel, error));
       });
   }
 }

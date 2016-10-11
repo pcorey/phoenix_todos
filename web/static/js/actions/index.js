@@ -20,6 +20,10 @@ export const JOIN_LISTS_CHANNEL_FAILURE = "JOIN_LISTS_CHANNEL_FAILURE";
 
 export const ADD_LIST = "ADD_LIST";
 
+export const CREATE_LIST_REQUEST = "CREATE_LIST_REQUEST";
+export const CREATE_LIST_SUCCESS = "CREATE_LIST_SUCCESS";
+export const CREATE_LIST_FAILURE = "CREATE_LIST_FAILURE";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -196,23 +200,58 @@ export function signIn(email, password) {
   }
 }
 
-export function joinListsChannel(channel) {
+export function joinListsChannel(channelName) {
   return (dispatch, getState) => {
     const { socket } = getState();
 
     dispatch(joinListsChannelRequest());
 
-    socket
-      .channel(channel)
+    let channel = socket.channel(channelName);
+    channel
       .join()
       .receive("ok", (lists) => {
         lists.forEach((list) => {
           dispatch(addList(list));
         });
         dispatch(joinListsChannelSuccess(channel));
+        dispatch(createAddListListeners(channel));
       })
       .receive("error", (error) => {
         dispatch(joinListsChannelFailure(channel, error));
       });
   }
+}
+
+export function createListRequest() {
+  return { type: CREATE_LIST_REQUEST };
+}
+
+export function createListSuccess() {
+  return { type: CREATE_LIST_SUCCESS };
+}
+
+export function createListFailure() {
+  return { type: CREATE_LIST_FAILURE };
+}
+
+export function createList(router) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(createListRequest());
+    channel.push("create_list")
+      .receive("ok", (list) => {
+        dispatch(createListSuccess());
+        router.push(`/lists/${ list.id }`);
+      })
+      .receive("error", () => dispatch(createListFailure()))
+      .receive("timeout", () => dispatch(createListFailure()));
+  }
+}
+
+export function createAddListListeners(channel) {
+  return (dispatch, getState) => {
+    channel.on("add_list", list => {
+      dispatch(addList(list));
+    });
+  };
 }

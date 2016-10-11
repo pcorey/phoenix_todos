@@ -11,14 +11,7 @@ export default class ListList extends React.Component {
 
   createNewList() {
     const { router } = this.context;
-    // const listId = insert.call((err) => {
-    //   if (err) {
-    //     router.push('/');
-    //     /* eslint-disable no-alert */
-    //     alert('Could not create list.');
-    //   }
-    // });
-    // router.push(`/lists/${ listId }`);
+    this.props.createList(router);
   }
 
   render() {

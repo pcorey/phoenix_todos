@@ -10,6 +10,8 @@ import {
   SIGN_IN_FAILURE,
   CONNECT_SOCKET,
   ADD_LIST,
+  JOIN_LISTS_CHANNEL_SUCCESS,
+  CREATE_LIST_SUCCESS,
 } from "../actions";
 
 const user = localStorage.getItem("user");
@@ -17,6 +19,7 @@ const jwt = localStorage.getItem("jwt");
 
 const initialState = {
   socket: undefined,
+  channel: undefined,
   user: user ? JSON.parse(user) : user,
   jwt,
   loading: false,
@@ -60,6 +63,8 @@ export default (state = initialState, action) => {
     });
   case CONNECT_SOCKET:
     return Object.assign({}, state, { socket: action.socket });
+  case JOIN_LISTS_CHANNEL_SUCCESS:
+    return Object.assign({}, state, { channel: action.channel });
   default:
     return state;
   }

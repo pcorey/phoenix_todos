@@ -5,7 +5,7 @@ import ListList from '../components/ListList.jsx';
 import ConnectionNotification from '../components/ConnectionNotification.jsx';
 import Loading from '../components/Loading.jsx';
 import { connect } from "react-redux";
-import { signOut } from "../actions";
+import { signOut, createList } from "../actions";
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
@@ -79,7 +79,7 @@ class App extends React.Component {
       <div id="container" className={menuOpen ? 'menu-open' : ''}>
         <section id="menu">
           <UserMenu user={user} logout={this.logout}/>
-          <ListList lists={lists}/>
+          <ListList lists={lists} createList={this.props.createList}/>
         </section>
         {showConnectionIssue && !connected
           ? <ConnectionNotification/>
@@ -121,6 +121,9 @@ export default connect(
     (dispatch) => ({
       signOut: (jwt) => {
         return dispatch(signOut(jwt));
+      },
+      createList: (router) => {
+        return dispatch(createList(router));
       }
     })
 )(App);

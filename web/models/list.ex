@@ -1,6 +1,8 @@
 defmodule PhoenixTodos.List do
   use PhoenixTodos.Web, :model
 
+  alias PhoenixTodos.Repo
+
   @derive {Poison.Encoder, only: [
     :id,
     :name,
@@ -32,10 +34,36 @@ defmodule PhoenixTodos.List do
     |> cast(params, @required_fields, @optional_fields)
   end
 
+  def create(name, suffix) do
+    PhoenixTodos.List
+    |> findByName("#{name} #{suffix}")
+    |> Repo.all
+    |> handle_create_find(name, suffix)
+  end
+  def create, do: create("List", "A")
+
+  def handle_create_find([], name, suffix) do
+    changeset(%PhoenixTodos.List{}, %{
+      name: "#{name} #{suffix}",
+      incomplete_count: 0
+    })
+    |> Repo.insert!
+  end
+
+  def handle_create_find(_, name, suffix) do
+    [char] = to_char_list suffix
+    create(name, to_string [char + 1])
+  end
+
   def public(query) do
     from list in query,
     where: is_nil(list.user_id),
     preload: [:todos]
+  end
+
+  def findByName(query, name) do
+    from list in query,
+    where: list.name == ^name
   end
 
 end

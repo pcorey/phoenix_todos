@@ -3,8 +3,10 @@ import ListHeader from '../components/ListHeader.jsx';
 import TodoItem from '../components/TodoItem.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import Message from '../components/Message.jsx';
+import { connect } from "react-redux";
+import { addTask } from "../actions";
 
-export default class ListPage extends React.Component {
+class ListPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,7 +50,7 @@ export default class ListPage extends React.Component {
 
     return (
       <div className="page lists-show">
-        <ListHeader list={list}/>
+        <ListHeader list={list} addTask={this.props.addTask}/>
         <div className="content-scrollable list-items">
           {loading ? <Message title="Loading tasks..."/> : Todos}
         </div>
@@ -63,3 +65,13 @@ ListPage.propTypes = {
   loading: React.PropTypes.bool,
   listExists: React.PropTypes.bool,
 };
+
+
+export default connect(
+    (state) => state,
+    (dispatch) => ({
+      addTask: (list_id, text) => {
+        return dispatch(addTask(list_id, text));
+      }
+    })
+)(ListPage);

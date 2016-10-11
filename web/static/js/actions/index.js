@@ -19,10 +19,15 @@ export const JOIN_LISTS_CHANNEL_SUCCESS = "JOIN_LISTS_CHANNEL_SUCCESS";
 export const JOIN_LISTS_CHANNEL_FAILURE = "JOIN_LISTS_CHANNEL_FAILURE";
 
 export const ADD_LIST = "ADD_LIST";
+export const UPDATE_LIST = "UPDATE_LIST";
 
 export const CREATE_LIST_REQUEST = "CREATE_LIST_REQUEST";
 export const CREATE_LIST_SUCCESS = "CREATE_LIST_SUCCESS";
 export const CREATE_LIST_FAILURE = "CREATE_LIST_FAILURE";
+
+export const ADD_TASK_REQUEST = "ADD_TASK_REQUEST";
+export const ADD_TASK_SUCCESS = "ADD_TASK_SUCCESS";
+export const ADD_TASK_FAILURE = "ADD_TASK_FAILURE";
 
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
@@ -62,6 +67,10 @@ export function signInFailure(errors) {
 
 export function addList(list) {
   return { type: ADD_LIST, list };
+}
+
+export function updateList(list) {
+  return { type: UPDATE_LIST, list };
 }
 
 export function connectSocket(jwt) {
@@ -248,10 +257,38 @@ export function createList(router) {
   }
 }
 
+export function addTaskRequest() {
+  return { type: ADD_TASK_REQUEST };
+}
+
+export function addTaskSuccess() {
+  return { type: ADD_TASK_SUCCESS };
+}
+
+export function addTaskFailure() {
+  return { type: ADD_TASK_FAILURE };
+}
+
+export function addTask(list_id, text) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(addTaskRequest());
+    channel.push("add_task", { list_id, text })
+      .receive("ok", (list) => {
+        dispatch(addTaskSuccess());
+      })
+      .receive("error", () => dispatch(addTaskFailure()))
+      .receive("timeout", () => dispatch(addTaskFailure()));
+  }
+}
+
 export function createAddListListeners(channel) {
   return (dispatch, getState) => {
     channel.on("add_list", list => {
       dispatch(addList(list));
     });
+    channel.on("update_list", list => {
+      dispatch(updateList(list));
+    })
   };
 }

@@ -10,6 +10,7 @@ import {
   SIGN_IN_FAILURE,
   CONNECT_SOCKET,
   ADD_LIST,
+  UPDATE_LIST,
   JOIN_LISTS_CHANNEL_SUCCESS,
   CREATE_LIST_SUCCESS,
 } from "../actions";
@@ -61,6 +62,11 @@ export default (state = initialState, action) => {
     return Object.assign({}, state, {
       lists: [...state.lists, action.list]
     });
+  case UPDATE_LIST:
+    let lists = state.lists.map(list => {
+      return list.id === action.list.id ? action.list : list;
+    });
+    return Object.assign({}, state, { lists });
   case CONNECT_SOCKET:
     return Object.assign({}, state, { socket: action.socket });
   case JOIN_LISTS_CHANNEL_SUCCESS:

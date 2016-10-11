@@ -96,10 +96,7 @@ export default class ListHeader extends React.Component {
     event.preventDefault();
     const input = this.refs.newTodoInput;
     if (input.value.trim()) {
-      insert.call({
-        listId: this.props.list._id,
-        text: input.value,
-      }, alert);
+      this.props.addTask(this.props.list.id, input.value);
       input.value = '';
     }
   }

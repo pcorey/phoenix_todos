@@ -55,6 +55,19 @@ defmodule PhoenixTodos.List do
     create(name, to_string [char + 1])
   end
 
+  def add_task(id, text) do
+    list = Repo.get(PhoenixTodos.List, id)
+
+    Ecto.build_assoc(list, :todos, text: text)
+    |> Repo.insert!
+
+    list
+    |> PhoenixTodos.List.changeset(%{
+      incomplete_count: list.incomplete_count + 1
+    })
+    |> Repo.update!
+  end
+
   def public(query) do
     from list in query,
     where: is_nil(list.user_id),

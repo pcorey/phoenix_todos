@@ -29,6 +29,10 @@ export const ADD_TASK_REQUEST = "ADD_TASK_REQUEST";
 export const ADD_TASK_SUCCESS = "ADD_TASK_SUCCESS";
 export const ADD_TASK_FAILURE = "ADD_TASK_FAILURE";
 
+export const SET_CHECKED_STATUS_REQUEST = "SET_CHECKED_STATUS_REQUEST";
+export const SET_CHECKED_STATUS_SUCCESS = "SET_CHECKED_STATUS_SUCCESS";
+export const SET_CHECKED_STATUS_FAILURE = "SET_CHECKED_STATUS_FAILURE";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -279,6 +283,32 @@ export function addTask(list_id, text) {
       })
       .receive("error", () => dispatch(addTaskFailure()))
       .receive("timeout", () => dispatch(addTaskFailure()));
+  }
+}
+
+export function setCheckedStatusRequest() {
+  return { type: SET_CHECKED_STATUS_REQUEST };
+}
+
+export function setCheckedStatusSuccess() {
+  return { type: SET_CHECKED_STATUS_SUCCESS };
+}
+
+export function setCheckedStatusFailure() {
+  return { type: SET_CHECKED_STATUS_FAILURE };
+}
+
+
+export function setCheckedStatus(todo_id, status) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(setCheckedStatusRequest());
+    channel.push("set_checked_status", { todo_id, status })
+      .receive("ok", (list) => {
+        dispatch(setCheckedStatusSuccess());
+      })
+      .receive("error", () => dispatch(setCheckedStatusFailure()))
+      .receive("timeout", () => dispatch(setCheckedStatusFailure()));
   }
 }
 

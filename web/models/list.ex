@@ -68,6 +68,25 @@ defmodule PhoenixTodos.List do
     |> Repo.update!
   end
 
+  def set_checked_status(todo_id, checked) do
+    todo = Repo.get(PhoenixTodos.Todo, todo_id)
+    |> Repo.preload(:list)
+    list = todo.list
+    inc = if (checked), do: - 1, else: 1
+
+    todo
+    |> PhoenixTodos.Todo.changeset(%{
+      checked: checked
+    })
+    |> Repo.update!
+
+    list
+    |> PhoenixTodos.List.changeset(%{
+      incomplete_count: list.incomplete_count + inc
+    })
+    |> Repo.update!
+  end
+
   def public(query) do
     from list in query,
     where: is_nil(list.user_id),

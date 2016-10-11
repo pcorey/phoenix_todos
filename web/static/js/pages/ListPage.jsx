@@ -4,7 +4,10 @@ import TodoItem from '../components/TodoItem.jsx';
 import NotFoundPage from '../pages/NotFoundPage.jsx';
 import Message from '../components/Message.jsx';
 import { connect } from "react-redux";
-import { addTask } from "../actions";
+import {
+  addTask,
+  setCheckedStatus
+} from "../actions";
 
 class ListPage extends React.Component {
   constructor(props) {
@@ -44,6 +47,7 @@ class ListPage extends React.Component {
           key={todo.id}
           editing={todo.id === editingTodo}
           onEditingChange={this.onEditingChange}
+          setCheckedStatus={this.props.setCheckedStatus}
         />
       ));
     }
@@ -72,6 +76,9 @@ export default connect(
     (dispatch) => ({
       addTask: (list_id, text) => {
         return dispatch(addTask(list_id, text));
+      },
+      setCheckedStatus: (todo_id, status) => {
+        return dispatch(setCheckedStatus(todo_id, status));
       }
     })
 )(ListPage);

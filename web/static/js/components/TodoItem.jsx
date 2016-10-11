@@ -2,12 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 import classnames from 'classnames';
 
-/* import {
- *   setCheckedStatus,
- *   updateText,
- *   remove,
- * } from '../../api/todos/methods.js';*/
-
 export default class TodoItem extends React.Component {
   constructor(props) {
     super(props);
@@ -36,10 +30,7 @@ export default class TodoItem extends React.Component {
   }
 
   setTodoCheckStatus(event) {
-    setCheckedStatus.call({
-      todoId: this.props.todo.id,
-      newCheckedStatus: event.target.checked,
-    });
+    this.props.setCheckedStatus(this.props.todo.id, event.target.checked);
   }
 
   updateTodo(event) {

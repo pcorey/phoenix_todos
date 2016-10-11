@@ -28,4 +28,16 @@ defmodule PhoenixTodos.ListChannel do
     {:noreply, socket}
   end
 
+  def handle_in("set_checked_status", %{
+      "todo_id" => todo_id,
+      "status" => status
+    }, socket) do
+    list = List.set_checked_status(todo_id, status)
+    |> Repo.preload(:todos)
+
+    broadcast! socket, "update_list", list
+
+    {:noreply, socket}
+  end
+
 end

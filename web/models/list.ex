@@ -58,6 +58,7 @@ defmodule PhoenixTodos.List do
   def public(query) do
     from list in query,
     where: is_nil(list.user_id),
+    order_by: list.inserted_at,
     preload: [:todos]
   end
 

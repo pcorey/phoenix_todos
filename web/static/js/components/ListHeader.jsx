@@ -67,10 +67,7 @@ export default class ListHeader extends React.Component {
 
   saveList() {
     this.setState({ editing: false });
-    updateName.call({
-      listId: this.props.list._id,
-      newName: this.refs.listNameInput.value,
-    }, alert);
+    this.props.updateName(this.props.list.id, this.refs.listNameInput.value);
   }
 
   deleteList() {

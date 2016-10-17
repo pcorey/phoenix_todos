@@ -33,6 +33,10 @@ export const SET_CHECKED_STATUS_REQUEST = "SET_CHECKED_STATUS_REQUEST";
 export const SET_CHECKED_STATUS_SUCCESS = "SET_CHECKED_STATUS_SUCCESS";
 export const SET_CHECKED_STATUS_FAILURE = "SET_CHECKED_STATUS_FAILURE";
 
+export const UPDATE_NAME_REQUEST = "UPDATE_NAME_REQUEST";
+export const UPDATE_NAME_SUCCESS = "UPDATE_NAME_SUCCESS";
+export const UPDATE_NAME_FAILURE = "UPDATE_NAME_FAILURE";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -321,4 +325,29 @@ export function createAddListListeners(channel) {
       dispatch(updateList(list));
     })
   };
+}
+
+export function updateNameRequest() {
+  return { type: UPDATE_NAME_REQUEST };
+}
+
+export function updateNameSuccess() {
+  return { type: UPDATE_NAME_SUCCESS };
+}
+
+export function updateNameFailure() {
+  return { type: UPDATE_NAME_FAILURE };
+}
+
+export function updateName(list_id, name) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(updateNameRequest());
+    channel.push("update_name", { list_id, name })
+      .receive("ok", (list) => {
+        dispatch(updateNameSuccess());
+      })
+      .receive("error", () => dispatch(updateNameFailure()))
+      .receive("timeout", () => dispatch(updateNameFailure()));
+  }
 }

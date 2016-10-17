@@ -68,6 +68,14 @@ defmodule PhoenixTodos.List do
     |> Repo.update!
   end
 
+  def update_name(id, name) do
+    Repo.get(PhoenixTodos.List, id)
+    |> changeset(%{
+      name: name
+    })
+    |> Repo.update!
+  end
+
   def set_checked_status(todo_id, checked) do
     todo = Repo.get(PhoenixTodos.Todo, todo_id)
     |> Repo.preload(:list)

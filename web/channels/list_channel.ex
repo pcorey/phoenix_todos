@@ -40,4 +40,16 @@ defmodule PhoenixTodos.ListChannel do
     {:noreply, socket}
   end
 
+  def handle_in("update_name", %{
+    "list_id" => list_id,
+    "name" => name
+  }, socket) do
+    list = List.update_name(list_id, name)
+    |> Repo.preload(:todos)
+
+    broadcast! socket, "update_list", list
+
+    {:noreply, socket}
+  end
+
 end

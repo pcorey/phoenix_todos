@@ -6,7 +6,8 @@ import Message from '../components/Message.jsx';
 import { connect } from "react-redux";
 import {
   addTask,
-  setCheckedStatus
+  setCheckedStatus,
+  updateName
 } from "../actions";
 
 class ListPage extends React.Component {
@@ -59,7 +60,7 @@ class ListPage extends React.Component {
 
     return (
       <div className="page lists-show">
-        <ListHeader list={list} addTask={this.props.addTask}/>
+        <ListHeader list={list} addTask={this.props.addTask} updateName={this.props.updateName}/>
         <div className="content-scrollable list-items">
           {loading ? <Message title="Loading tasks..."/> : Todos}
         </div>
@@ -84,6 +85,9 @@ export default connect(
       },
       setCheckedStatus: (todo_id, status) => {
         return dispatch(setCheckedStatus(todo_id, status));
+      },
+      updateName: (list_id, name) => {
+        return dispatch(updateName(list_id, name));
       }
     })
 )(ListPage);

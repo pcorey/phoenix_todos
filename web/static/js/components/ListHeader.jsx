@@ -75,8 +75,8 @@ export default class ListHeader extends React.Component {
     const message = `Are you sure you want to delete the list ${list.name}?`;
 
     if (confirm(message)) { // eslint-disable-line no-alert
-      remove.call({ listId: list._id }, alert);
-      /* this.context.router.push('/');*/
+      this.props.deleteList(list.id);
+      this.context.router.push('/');
     }
   }
 

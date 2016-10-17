@@ -11,6 +11,7 @@ import {
   CONNECT_SOCKET,
   ADD_LIST,
   UPDATE_LIST,
+  REMOVE_LIST,
   JOIN_LISTS_CHANNEL_SUCCESS,
   CREATE_LIST_SUCCESS,
 } from "../actions";
@@ -65,6 +66,11 @@ export default (state = initialState, action) => {
   case UPDATE_LIST:
     let lists = state.lists.map(list => {
       return list.id === action.list.id ? action.list : list;
+    });
+    return Object.assign({}, state, { lists });
+  case REMOVE_LIST:
+    lists = state.lists.filter(list => {
+      return list.id !== action.list.id
     });
     return Object.assign({}, state, { lists });
   case CONNECT_SOCKET:

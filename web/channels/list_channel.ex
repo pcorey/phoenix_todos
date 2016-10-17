@@ -52,4 +52,15 @@ defmodule PhoenixTodos.ListChannel do
     {:noreply, socket}
   end
 
+  def handle_in("delete_list", %{
+    "list_id" => list_id,
+  }, socket) do
+    list = List.delete(list_id)
+    |> Repo.preload(:todos)
+
+    broadcast! socket, "remove_list", list
+
+    {:noreply, socket}
+  end
+
 end

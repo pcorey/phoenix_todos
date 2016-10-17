@@ -20,6 +20,7 @@ export const JOIN_LISTS_CHANNEL_FAILURE = "JOIN_LISTS_CHANNEL_FAILURE";
 
 export const ADD_LIST = "ADD_LIST";
 export const UPDATE_LIST = "UPDATE_LIST";
+export const REMOVE_LIST = "REMOVE_LIST";
 
 export const CREATE_LIST_REQUEST = "CREATE_LIST_REQUEST";
 export const CREATE_LIST_SUCCESS = "CREATE_LIST_SUCCESS";
@@ -36,6 +37,10 @@ export const SET_CHECKED_STATUS_FAILURE = "SET_CHECKED_STATUS_FAILURE";
 export const UPDATE_NAME_REQUEST = "UPDATE_NAME_REQUEST";
 export const UPDATE_NAME_SUCCESS = "UPDATE_NAME_SUCCESS";
 export const UPDATE_NAME_FAILURE = "UPDATE_NAME_FAILURE";
+
+export const DELETE_LIST_REQUEST = "DELETE_LIST_REQUEST";
+export const DELETE_LIST_SUCCESS = "DELETE_LIST_SUCCESS";
+export const DELETE_LIST_FAILURE = "DELETE_LIST_FAILURE";
 
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
@@ -79,6 +84,10 @@ export function addList(list) {
 
 export function updateList(list) {
   return { type: UPDATE_LIST, list };
+}
+
+export function removeList(list) {
+  return { type: REMOVE_LIST, list };
 }
 
 export function connectSocket(jwt) {
@@ -324,6 +333,9 @@ export function createAddListListeners(channel) {
     channel.on("update_list", list => {
       dispatch(updateList(list));
     })
+    channel.on("remove_list", list => {
+      dispatch(removeList(list));
+    });
   };
 }
 
@@ -349,5 +361,30 @@ export function updateName(list_id, name) {
       })
       .receive("error", () => dispatch(updateNameFailure()))
       .receive("timeout", () => dispatch(updateNameFailure()));
+  }
+}
+
+export function deleteListRequest() {
+  return { type: DELETE_LIST_REQUEST };
+}
+
+export function deleteListSuccess() {
+  return { type: DELETE_LIST_SUCCESS };
+}
+
+export function deleteListFailure() {
+  return { type: DELETE_LIST_FAILURE };
+}
+
+export function deleteList(list_id, name) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(deleteListRequest());
+    channel.push("delete_list", { list_id, name })
+      .receive("ok", (list) => {
+        dispatch(deleteListSuccess());
+      })
+      .receive("error", () => dispatch(deleteListFailure()))
+      .receive("timeout", () => dispatch(deleteListFailure()));
   }
 }

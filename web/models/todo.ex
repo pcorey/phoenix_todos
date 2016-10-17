@@ -4,7 +4,8 @@ defmodule PhoenixTodos.Todo do
   @derive {Poison.Encoder, only: [
     :id,
     :text,
-    :checked
+    :checked,
+    :inserted_at
   ]}
 
   schema "todos" do

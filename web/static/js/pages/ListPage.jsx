@@ -41,7 +41,12 @@ class ListPage extends React.Component {
         />
       );
     } else {
-      Todos = todos.map(todo => (
+      Todos = todos
+        .sort((a, b) => {
+          let diff = new Date(a.inserted_at) - new Date(b.inserted_at);
+          return diff == 0 ? a.text > b.text : diff;
+        })
+        .map(todo => (
         <TodoItem
           todo={todo}
           key={todo.id}

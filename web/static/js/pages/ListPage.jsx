@@ -8,7 +8,8 @@ import {
   addTask,
   setCheckedStatus,
   updateName,
-  deleteList
+  deleteList,
+  deleteTodo
 } from "../actions";
 
 class ListPage extends React.Component {
@@ -55,6 +56,7 @@ class ListPage extends React.Component {
           editing={todo.id === editingTodo}
           onEditingChange={this.onEditingChange}
           setCheckedStatus={this.props.setCheckedStatus}
+          deleteTodo={this.props.deleteTodo}
         />
       ));
     }
@@ -95,6 +97,9 @@ export default connect(
       },
       deleteList: (list_id) => {
         return dispatch(deleteList(list_id));
+      },
+      deleteTodo: (todo_id) => {
+        return dispatch(deleteTodo(todo_id));
       }
     })
 )(ListPage);

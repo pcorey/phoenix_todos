@@ -38,7 +38,7 @@ export default class TodoItem extends React.Component {
   }
 
   deleteTodo() {
-    remove.call({ todoId: this.props.todo.id }, alert);
+    this.props.deleteTodo(this.props.todo.id);
   }
 
   render() {

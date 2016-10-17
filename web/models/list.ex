@@ -81,6 +81,15 @@ defmodule PhoenixTodos.List do
     |> Repo.delete!
   end
 
+  def delete_todo(todo_id) do
+    todo = Repo.get(PhoenixTodos.Todo, todo_id)
+    |> Repo.preload(:list)
+
+    Repo.delete!(todo)
+
+    todo.list
+  end
+
   def set_checked_status(todo_id, checked) do
     todo = Repo.get(PhoenixTodos.Todo, todo_id)
     |> Repo.preload(:list)

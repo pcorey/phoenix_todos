@@ -42,6 +42,10 @@ export const DELETE_LIST_REQUEST = "DELETE_LIST_REQUEST";
 export const DELETE_LIST_SUCCESS = "DELETE_LIST_SUCCESS";
 export const DELETE_LIST_FAILURE = "DELETE_LIST_FAILURE";
 
+export const DELETE_TODO_REQUEST = "DELETE_TODO_REQUEST";
+export const DELETE_TODO_SUCCESS = "DELETE_TODO_SUCCESS";
+export const DELETE_TODO_FAILURE = "DELETE_TODO_FAILURE";
+
 export function signUpRequest() {
   return { type: SIGN_UP_REQUEST };
 }
@@ -386,5 +390,30 @@ export function deleteList(list_id, name) {
       })
       .receive("error", () => dispatch(deleteListFailure()))
       .receive("timeout", () => dispatch(deleteListFailure()));
+  }
+}
+
+export function deleteTodoRequest() {
+  return { type: DELETE_TODO_REQUEST };
+}
+
+export function deleteTodoSuccess() {
+  return { type: DELETE_TODO_SUCCESS };
+}
+
+export function deleteTodoFailure() {
+  return { type: DELETE_TODO_FAILURE };
+}
+
+export function deleteTodo(todo_id, name) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(deleteTodoRequest());
+    channel.push("delete_todo", { todo_id, name })
+      .receive("ok", (list) => {
+        dispatch(deleteTodoSuccess());
+      })
+      .receive("error", () => dispatch(deleteTodoFailure()))
+      .receive("timeout", () => dispatch(deleteTodoFailure()));
   }
 }

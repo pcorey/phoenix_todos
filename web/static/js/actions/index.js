@@ -95,13 +95,16 @@ export function removeList(list) {
 }
 
 export function connectSocket(jwt) {
-  let socket = new Socket("/socket", {
-    params: {
-      guardian_token: jwt
-    }
-  });
-  socket.connect();
-  return { type: CONNECT_SOCKET, socket };
+  return (dispatch, getState) => {
+    let socket = new Socket("/socket", {
+      params: {
+        guardian_token: jwt
+      }
+    });
+    socket.connect();
+    dispatch({ type: CONNECT_SOCKET, socket });
+    dispatch(joinListsChannel("lists.public"));
+  };
 }
 
 export function joinListsChannelRequest(channel) {

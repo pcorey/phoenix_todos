@@ -21,4 +21,3 @@ function render() {
 render();
 
 store.dispatch(connectSocket(store.getState().jwt));
-store.dispatch(joinListsChannel("lists.public"));

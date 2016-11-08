@@ -74,7 +74,7 @@ export default (state = initialState, action) => {
     });
     return Object.assign({}, state, { lists });
   case CONNECT_SOCKET:
-    return Object.assign({}, state, { socket: action.socket });
+    return Object.assign({}, state, { socket: action.socket, lists: [] });
   case JOIN_LISTS_CHANNEL_SUCCESS:
     return Object.assign({}, state, { channel: action.channel });
   default:

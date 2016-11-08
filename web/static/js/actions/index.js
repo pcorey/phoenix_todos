@@ -161,6 +161,7 @@ export function signUp(email, password, password_confirm) {
           localStorage.setItem("user", JSON.stringify(res.user));
           localStorage.setItem("jwt", res.jwt);
           dispatch(signUpSuccess(res.user, res.jwt));
+          dispatch(connectSocket(res.jwt));
           return true;
         }
       });
@@ -188,6 +189,7 @@ export function signOut(jwt) {
           localStorage.removeItem("user");
           localStorage.removeItem("jwt");
           dispatch(signOutSuccess());
+          dispatch(connectSocket(res.jwt));
           return true;
         }
       });
@@ -227,6 +229,7 @@ export function signIn(email, password) {
           localStorage.setItem("user", JSON.stringify(res.user));
           localStorage.setItem("jwt", res.jwt);
           dispatch(signInSuccess(res.user, res.jwt));
+          dispatch(connectSocket(res.jwt));
           return true;
         }
       });

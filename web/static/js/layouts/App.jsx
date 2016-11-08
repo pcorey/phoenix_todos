@@ -6,6 +6,7 @@ import ConnectionNotification from '../components/ConnectionNotification.jsx';
 import Loading from '../components/Loading.jsx';
 import { connect } from "react-redux";
 import { signOut, createList } from "../actions";
+import _ from "lodash";
 
 const CONNECTION_ISSUE_TIMEOUT = 5000;
 
@@ -46,7 +47,7 @@ class App extends React.Component {
           // if we are on a private list, we'll need to go to a public one
           if (this.props.params.id) {
             const list = _.find(this.props.lists, list => list.id == this.props.params.id);
-            if (list.user_id) {
+            if (list && list.user_id) {
               const publicList = _.find(this.props.list, list => !list.user_id);
               this.context.router.push(`/lists/${ publicList.id }`);
             }

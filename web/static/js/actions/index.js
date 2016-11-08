@@ -97,7 +97,7 @@ export function removeList(list) {
 export function connectSocket(jwt) {
   let socket = new Socket("/socket", {
     params: {
-      token: jwt
+      guardian_token: jwt
     }
   });
   socket.connect();

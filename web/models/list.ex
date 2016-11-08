@@ -109,9 +109,16 @@ defmodule PhoenixTodos.List do
     |> Repo.update!
   end
 
-  def public(query) do
+  def all(query, nil) do
     from list in query,
     where: is_nil(list.user_id),
+    order_by: list.inserted_at,
+    preload: [:todos]
+  end
+
+  def all(query, user_id) do
+    from list in query,
+    where: ^user_id == list.user_id or is_nil(list.user_id),
     order_by: list.inserted_at,
     preload: [:todos]
   end

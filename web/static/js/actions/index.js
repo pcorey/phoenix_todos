@@ -103,7 +103,7 @@ export function connectSocket(jwt) {
     });
     socket.connect();
     dispatch({ type: CONNECT_SOCKET, socket });
-    dispatch(joinListsChannel("lists.public"));
+    dispatch(joinListsChannel("lists"));
   };
 }
 

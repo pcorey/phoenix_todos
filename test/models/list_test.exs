@@ -18,7 +18,7 @@ defmodule PhoenixTodos.ListTest do
     refute changeset.valid?
   end
 
-  test "public" do
+  test "all" do
     user = User.changeset(%User{}, %{
       email: "user@example.com",
       password: "password"
@@ -27,14 +27,18 @@ defmodule PhoenixTodos.ListTest do
       name: "public",
       incomplete_count: 1
     })
-    Repo.insert!(%List{
+    |> Repo.preload(:todos)
+    private = Repo.insert!(%List{
       name: "private",
       incomplete_count: 1,
       user_id: user.id
     })
+    |> Repo.preload(:todos)
 
-    lists = List |> List.public |> Repo.all
+    public_lists = List |> List.all(nil) |> Repo.all |> Repo.preload(:todos)
+    all_lists = List |> List.all(user.id) |> Repo.all |> Repo.preload(:todos)
 
-    assert lists == [public]
+    assert public_lists == [public]
+    assert all_lists == [public, private]
   end
 end

@@ -2,8 +2,17 @@ defmodule PhoenixTodos.ListChannel do
   use Phoenix.Channel
   alias PhoenixTodos.{Repo, List}
 
-  def join("lists.public", _message, socket) do
-    lists = List |> List.public |> Repo.all
+  defp get_user_id(socket) do
+    case Guardian.Phoenix.Socket.current_resource(socket) do
+      user ->
+        user.id
+      _ ->
+        nil
+    end
+  end
+
+  def join("lists", _message, socket) do
+    lists = List |> List.all(get_user_id(socket)) |> Repo.all
     {:ok, lists, socket}
   end
 

@@ -21,7 +21,7 @@ defmodule PhoenixTodos.List do
   end
 
   @required_fields ~w(name incomplete_count)
-  @optional_fields ~w()
+  @optional_fields ~w(user_id)
 
   @doc """
   Creates a changeset based on the `model` and `params`.
@@ -81,6 +81,14 @@ defmodule PhoenixTodos.List do
     |> Repo.delete!
   end
 
+  def make_private(user_id, id) do
+    Repo.get(PhoenixTodos.List, id)
+    |> changeset(%{
+      user_id: user_id
+    })
+    |> Repo.update!
+  end
+
   def delete_todo(todo_id) do
     todo = Repo.get(PhoenixTodos.Todo, todo_id)
     |> Repo.preload(:list)
@@ -127,5 +135,9 @@ defmodule PhoenixTodos.List do
     from list in query,
     where: list.name == ^name
   end
+
+  def canView?(_, %{user_id: nil}), do: true
+  def canView?(user_id, %{user_id: user_id}), do: true
+  def canView?(_, _), do: false
 
 end

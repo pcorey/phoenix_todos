@@ -2,6 +2,8 @@ defmodule PhoenixTodos.ListChannel do
   use Phoenix.Channel
   alias PhoenixTodos.{Repo, List}
 
+  intercept ["update_list"]
+
   defp get_user_id(socket) do
     case Guardian.Phoenix.Socket.current_resource(socket) do
       user ->
@@ -72,6 +74,18 @@ defmodule PhoenixTodos.ListChannel do
     {:noreply, socket}
   end
 
+  def handle_in("make_private", %{
+    "list_id" => list_id,
+  }, socket) do
+    list = get_user_id(socket)
+    |> List.make_private(list_id)
+    |> Repo.preload(:todos)
+
+    broadcast! socket, "update_list", list
+
+    {:noreply, socket}
+  end
+
   def handle_in("delete_todo", %{
     "todo_id" => todo_id,
   }, socket) do
@@ -80,6 +94,16 @@ defmodule PhoenixTodos.ListChannel do
 
     broadcast! socket, "update_list", list
 
+    {:noreply, socket}
+  end
+
+  def handle_out("update_list", list, socket) do
+    case List.canView?(get_user_id(socket), list) do
+      true ->
+        push(socket, "update_list", list)
+      false ->
+        push(socket, "remove_list", list)
+    end
     {:noreply, socket}
   end
 

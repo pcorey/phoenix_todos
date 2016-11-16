@@ -85,7 +85,7 @@ export default class ListHeader extends React.Component {
     if (list.user_id) {
       makePublic.call({ listId: list._id }, alert);
     } else {
-      makePrivate.call({ listId: list._id }, alert);
+      this.props.makePrivate(list.id);
     }
   }
 

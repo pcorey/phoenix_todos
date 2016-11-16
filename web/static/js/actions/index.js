@@ -42,6 +42,10 @@ export const DELETE_LIST_REQUEST = "DELETE_LIST_REQUEST";
 export const DELETE_LIST_SUCCESS = "DELETE_LIST_SUCCESS";
 export const DELETE_LIST_FAILURE = "DELETE_LIST_FAILURE";
 
+export const MAKE_PRIVATE_REQUEST = "MAKE_PRIVATE_REQUEST";
+export const MAKE_PRIVATE_SUCCESS = "MAKE_PRIVATE_SUCCESS";
+export const MAKE_PRIVATE_FAILURE = "MAKE_PRIVATE_FAILURE";
+
 export const DELETE_TODO_REQUEST = "DELETE_TODO_REQUEST";
 export const DELETE_TODO_SUCCESS = "DELETE_TODO_SUCCESS";
 export const DELETE_TODO_FAILURE = "DELETE_TODO_FAILURE";
@@ -341,6 +345,7 @@ export function createAddListListeners(channel) {
       dispatch(addList(list));
     });
     channel.on("update_list", list => {
+      console.log("update_list", list)
       dispatch(updateList(list));
     })
     channel.on("remove_list", list => {
@@ -396,6 +401,31 @@ export function deleteList(list_id, name) {
       })
       .receive("error", () => dispatch(deleteListFailure()))
       .receive("timeout", () => dispatch(deleteListFailure()));
+  }
+}
+
+export function makePrivateRequest() {
+  return { type: MAKE_PRIVATE_REQUEST };
+}
+
+export function makePrivateSuccess() {
+  return { type: MAKE_PRIVATE_SUCCESS };
+}
+
+export function makePrivateFailure() {
+  return { type: MAKE_PRIVATE_FAILURE };
+}
+
+export function makePrivate(list_id) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(makePrivateRequest());
+    channel.push("make_private", { list_id })
+      .receive("ok", (list) => {
+        dispatch(makePrivateSuccess());
+      })
+      .receive("error", () => dispatch(makePrivateFailure()))
+      .receive("timeout", () => dispatch(makePrivateFailure()));
   }
 }
 

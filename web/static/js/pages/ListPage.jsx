@@ -9,6 +9,7 @@ import {
   setCheckedStatus,
   updateName,
   deleteList,
+  makePrivate,
   deleteTodo
 } from "../actions";
 
@@ -66,7 +67,9 @@ class ListPage extends React.Component {
         <ListHeader list={list}
                     addTask={this.props.addTask}
                     updateName={this.props.updateName}
-                    deleteList={this.props.deleteList}/>
+                    deleteList={this.props.deleteList}
+                    makePrivate={this.props.makePrivate}
+        />
         <div className="content-scrollable list-items">
           {loading ? <Message title="Loading tasks..."/> : Todos}
         </div>
@@ -97,6 +100,9 @@ export default connect(
       },
       deleteList: (list_id) => {
         return dispatch(deleteList(list_id));
+      },
+      makePrivate: (list_id) => {
+        return dispatch(makePrivate(list_id));
       },
       deleteTodo: (todo_id) => {
         return dispatch(deleteTodo(todo_id));

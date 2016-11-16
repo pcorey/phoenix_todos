@@ -89,6 +89,14 @@ defmodule PhoenixTodos.List do
     |> Repo.update!
   end
 
+  def make_public(id) do
+    Repo.get(PhoenixTodos.List, id)
+    |> changeset(%{
+      user_id: nil
+    })
+    |> Repo.update!
+  end
+
   def delete_todo(todo_id) do
     todo = Repo.get(PhoenixTodos.Todo, todo_id)
     |> Repo.preload(:list)

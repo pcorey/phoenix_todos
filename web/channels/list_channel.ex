@@ -86,6 +86,17 @@ defmodule PhoenixTodos.ListChannel do
     {:noreply, socket}
   end
 
+  def handle_in("make_public", %{
+    "list_id" => list_id,
+  }, socket) do
+    list = List.make_public(list_id)
+    |> Repo.preload(:todos)
+
+    broadcast! socket, "update_list", list
+
+    {:noreply, socket}
+  end
+
   def handle_in("delete_todo", %{
     "todo_id" => todo_id,
   }, socket) do

@@ -46,6 +46,10 @@ export const MAKE_PRIVATE_REQUEST = "MAKE_PRIVATE_REQUEST";
 export const MAKE_PRIVATE_SUCCESS = "MAKE_PRIVATE_SUCCESS";
 export const MAKE_PRIVATE_FAILURE = "MAKE_PRIVATE_FAILURE";
 
+export const MAKE_PUBLIC_REQUEST = "MAKE_PUBLIC_REQUEST";
+export const MAKE_PUBLIC_SUCCESS = "MAKE_PUBLIC_SUCCESS";
+export const MAKE_PUBLIC_FAILURE = "MAKE_PUBLIC_FAILURE";
+
 export const DELETE_TODO_REQUEST = "DELETE_TODO_REQUEST";
 export const DELETE_TODO_SUCCESS = "DELETE_TODO_SUCCESS";
 export const DELETE_TODO_FAILURE = "DELETE_TODO_FAILURE";
@@ -345,7 +349,6 @@ export function createAddListListeners(channel) {
       dispatch(addList(list));
     });
     channel.on("update_list", list => {
-      console.log("update_list", list)
       dispatch(updateList(list));
     })
     channel.on("remove_list", list => {
@@ -426,6 +429,31 @@ export function makePrivate(list_id) {
       })
       .receive("error", () => dispatch(makePrivateFailure()))
       .receive("timeout", () => dispatch(makePrivateFailure()));
+  }
+}
+
+export function makePublicRequest() {
+  return { type: MAKE_PUBLIC_REQUEST };
+}
+
+export function makePublicSuccess() {
+  return { type: MAKE_PUBLIC_SUCCESS };
+}
+
+export function makePublicFailure() {
+  return { type: MAKE_PUBLIC_FAILURE };
+}
+
+export function makePublic(list_id) {
+  return (dispatch, getState) => {
+    const { channel } = getState();
+    dispatch(makePublicRequest());
+    channel.push("make_public", { list_id })
+      .receive("ok", (list) => {
+        dispatch(makePublicSuccess());
+      })
+      .receive("error", () => dispatch(makePublicFailure()))
+      .receive("timeout", () => dispatch(makePublicFailure()));
   }
 }
 

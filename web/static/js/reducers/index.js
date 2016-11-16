@@ -64,9 +64,19 @@ export default (state = initialState, action) => {
       lists: [...state.lists, action.list]
     });
   case UPDATE_LIST:
+    let found = false;
     let lists = state.lists.map(list => {
-      return list.id === action.list.id ? action.list : list;
+      if (list.id === action.list.id) {
+        found = true;
+        return action.list;
+      }
+      else {
+        return list;
+      }
     });
+    if (!found) {
+      lists.push(action.list);
+    }
     return Object.assign({}, state, { lists });
   case REMOVE_LIST:
     lists = state.lists.filter(list => {

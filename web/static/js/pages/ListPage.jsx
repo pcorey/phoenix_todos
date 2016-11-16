@@ -10,6 +10,7 @@ import {
   updateName,
   deleteList,
   makePrivate,
+  makePublic,
   deleteTodo
 } from "../actions";
 
@@ -69,6 +70,7 @@ class ListPage extends React.Component {
                     updateName={this.props.updateName}
                     deleteList={this.props.deleteList}
                     makePrivate={this.props.makePrivate}
+                    makePublic={this.props.makePublic}
         />
         <div className="content-scrollable list-items">
           {loading ? <Message title="Loading tasks..."/> : Todos}
@@ -103,6 +105,9 @@ export default connect(
       },
       makePrivate: (list_id) => {
         return dispatch(makePrivate(list_id));
+      },
+      makePublic: (list_id) => {
+        return dispatch(makePublic(list_id));
       },
       deleteTodo: (todo_id) => {
         return dispatch(deleteTodo(todo_id));
